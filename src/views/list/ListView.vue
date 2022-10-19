@@ -55,7 +55,11 @@
       >
         <v-card-title>{{ item.title }}</v-card-title>
 
-        <v-img class="mx-auto" src="@/assets/logo.png" width="200" />
+        <v-img
+          class="mx-auto"
+          :src="`http://localhost:3000/${item.image}`"
+          height="200"
+        />
 
         <v-card-actions>
           <v-tooltip right>
@@ -104,13 +108,14 @@
               <v-row>
                 <v-col cols="12">
                   <v-file-input
-                    v-model="form.file"
-                    label="Vídeo (mp4)"
+                    v-model="form.video"
+                    label="Video (mp4)"
                     show-size
                     truncate-length="50"
                     accept=".mp4"
+                    prepend-icon="mdi-video-image"
                     :rules="[rules.notEmptyObject]"
-                    @change="onChangeFileInput"
+                    @change="onChangeVideoInput"
                   />
                 </v-col>
 
@@ -124,13 +129,25 @@
                     <v-icon slot="prepend"> mdi-format-title </v-icon>
                   </v-text-field>
                 </v-col>
+
+                <v-col cols="12">
+                  <v-file-input
+                    v-model="form.thumbnail"
+                    label="Thumbnail (jpeg)"
+                    show-size
+                    truncate-length="50"
+                    accept=".jpeg"
+                    prepend-icon="mdi-camera-image"
+                    :rules="[rules.notEmptyObject]"
+                  />
+                </v-col>
               </v-row>
             </v-form>
           </v-container>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="error darken-1" text @click="onCloseDialog">
+          <v-btn color="error darken-1" text @click="onCancelDialog">
             Cancel
           </v-btn>
 
@@ -165,7 +182,8 @@ export default {
     dialog: false,
     form: {
       title: "",
-      file: null,
+      video: null,
+      thumbnail: null,
       valid: false,
     },
     rules: {
@@ -213,7 +231,8 @@ export default {
     async onSubmitForm() {
       if (this.form.valid) {
         let formData = new FormData();
-        formData.append("video", this.form.file);
+        formData.append("video", this.form.video);
+        formData.append("jpeg", this.form.thumbnail);
 
         await this.$axios
           .post("http://localhost:3000/upload", formData)
@@ -222,12 +241,12 @@ export default {
           )
           .catch(() => this.onApiError());
 
-        this.onCloseDialog();
+        this.onCancelDialog();
         this.fetch();
       } else this.$refs.form.validate();
     },
 
-    onCloseDialog() {
+    onCancelDialog() {
       this.resetForm();
       this.dialog = false;
     },
@@ -235,19 +254,16 @@ export default {
     resetForm() {
       this.form = {
         title: "",
-        file: null,
+        video: null,
+        thumbnail: null,
         valid: false,
       };
       this.$refs.form.reset();
     },
 
-    onChangeFileInput(file) {
-      if (!file) {
-        this.form.title = "";
-        return;
-      }
-
-      this.form.title = file.name.replaceAll("_", " ").replace(".mp4", "");
+    onChangeVideoInput(file) {
+      if (!file) this.form.title = "";
+      else this.form.title = file.name.replaceAll("_", " ").replace(".mp4", "");
     },
 
     onApiError() {
