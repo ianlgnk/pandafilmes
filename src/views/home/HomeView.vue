@@ -32,6 +32,7 @@ export default {
   methods: {
     onBtnClick() {
       this.loading = true;
+
       setTimeout(() => {
         this.$router.push("/explore");
       }, 2000);
