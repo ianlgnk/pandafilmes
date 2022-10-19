@@ -196,14 +196,14 @@ export default {
       this.list = data;
 
       if (this.list.length === 0)
-        this.useSnackbar("warning darken-2", "No videos found!");
+        this.useSnackbar("warning darken-1", "No videos found!");
     },
 
     async onClickBtnDelete(id) {
       await this.$axios
         .delete(`http://localhost:3000/delete/${id}`)
         .then(() =>
-          this.useSnackbar("success darken-2", "Video successfully deleted!")
+          this.useSnackbar("success darken-1", "Video successfully deleted!")
         )
         .catch(() => this.onApiError());
 
@@ -218,7 +218,7 @@ export default {
         await this.$axios
           .post("http://localhost:3000/upload", formData)
           .then(() =>
-            this.useSnackbar("success darken-2", "Video successfully uploaded!")
+            this.useSnackbar("success darken-1", "Video successfully uploaded!")
           )
           .catch(() => this.onApiError());
 
@@ -252,7 +252,7 @@ export default {
 
     onApiError() {
       this.useSnackbar(
-        "error darken-2",
+        "error darken-1",
         "Oops... Aparentemente algo deu errado e não foi possível prosseguir com a operação!"
       );
     },
