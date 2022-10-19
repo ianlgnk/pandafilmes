@@ -34,8 +34,8 @@ export default {
       this.loading = true;
 
       setTimeout(() => {
-        this.$router.push("/explore");
-      }, 2000);
+        this.$router.push("/list");
+      }, 1200);
     },
   },
 };
