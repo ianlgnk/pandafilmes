@@ -19,14 +19,6 @@
 
       <v-spacer />
 
-      <v-avatar>
-        <v-img
-          :src="require('@/assets/logo.png')"
-          alt="PandaFilm - Logo"
-          contain
-        />
-      </v-avatar>
-
       <v-spacer />
 
       <v-tooltip left>
